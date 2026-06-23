@@ -1,0 +1,115 @@
+<ion-content class="ion-padding ion-text-center dark-login">
+  <div class="login-wrapper">
+    
+    <div class="logo-login-container" style="margin-bottom: 20px; display: flex; justify-content: center;">
+      <img src="assets/logo.jpg" alt="ISP PERU" style="height: 75px; max-width: 100%; object-fit: contain;" onerror="this.src='https://i.imgur.com/wdfXzHk.png'" />
+    </div>
+    
+    <h1 class="brand-title">ISP PERU</h1>
+    <h3 class="login-subtitle">Iniciar sesión</h3>
+
+    <div class="form-container">
+      <ion-item class="custom-input" lines="none">
+        <ion-input 
+          label="Correo" 
+          labelPlacement="stacked" 
+          type="email" 
+          placeholder="Ingrese su correo"
+          [(ngModel)]="userEmail">
+        </ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input ion-margin-top" lines="none">
+        <ion-input 
+          label="Contraseña" 
+          labelPlacement="stacked" 
+          type="password" 
+          placeholder="Ingrese su contraseña"
+          [(ngModel)]="userPass">
+        </ion-input>
+      </ion-item>
+    </div>
+
+    <ion-button expand="block" shape="round" class="btn-iniciar ion-margin-top" (click)="onLogin()">
+      INICIAR
+    </ion-button>
+
+    <div class="ion-margin-top" style="margin-top: 20px; margin-bottom: 10px;">
+      <a id="trigger-recuperar-modal" class="bold-link" style="color: #3b82f6; font-size: 13px; font-weight: 600; text-decoration: none; cursor: pointer;">
+        ¿Olvidaste tu contraseña?
+      </a>
+    </div>
+
+    <div class="footer-links ion-margin-top">
+      <p class="white-text">
+        ¿No tienes cuenta? 
+        <ion-text color="primary" class="bold-link" routerLink="/registro-empleado">Registrarse</ion-text>
+      </p>
+      <p class="white-text">
+        ¿Eres empresa? 
+        <ion-text color="primary" class="bold-link" routerLink="/registro-empresa">Registrar empresa</ion-text>
+      </p>
+    </div>
+
+  </div>
+
+  <ion-modal trigger="trigger-recuperar-modal" #modalActualizar style="--background: #ffffff;">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar style="--background: #ffffff; padding: 5px 10px 0 10px;">
+          <ion-buttons slot="start">
+            <ion-button color="medium" style="font-weight: 600; font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial', sans-serif;" (click)="modalActualizar.dismiss()">
+              Cancelar
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content style="--background: #ffffff; --padding-top: 0px;">
+        <div style="max-width: 280px; margin: 0 auto; padding: 10px 10px 40px 10px; text-align: center; font-family: 'Arial', sans-serif; background-color: #ffffff;">
+          
+          <div style="margin-bottom: 25px; display: flex; justify-content: center;">
+            <img src="assets/logo.jpg" alt="ISP PERU" style="height: 60px; object-fit: contain;" onerror="this.src='https://i.imgur.com/wdfXzHk.png'" />
+          </div>
+
+          <h2 style="font-size: 32px; font-weight: normal; color: #000000; margin: 0 0 35px 0; font-family: 'Arial', sans-serif; letter-spacing: -0.5px; line-height: 1.2;">
+            Actualizar<br>contraseña
+          </h2>
+
+          <div style="text-align: left; margin-bottom: 20px;">
+            <label style="font-size: 16px; color: #000000; font-weight: normal; display: block; margin-bottom: 4px;">Correo</label>
+            <input type="email" [(ngModel)]="recoveryEmail" style="width: 100%; height: 42px; padding: 5px 8px; border: 2px solid #000000; background: #ffffff; color: #000000; font-size: 16px; outline: none; border-radius: 0px;" />
+          </div>
+
+          <div style="text-align: left; margin-bottom: 12px;">
+            <label style="font-size: 16px; color: #000000; font-weight: normal; display: block; margin-bottom: 4px;">Código de confirmación</label>
+            <input type="text" [(ngModel)]="recoveryCode" style="width: 100%; height: 42px; padding: 5px 8px; border: 2px solid #000000; background: #ffffff; color: #000000; font-size: 16px; outline: none; border-radius: 0px;" />
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; margin-bottom: 25px;">
+            <button (click)="enviarCodigoVerificacion()" style="padding: 6px 14px; background: #ffffff; color: #000000; border: 2px solid #000000; font-size: 15px; font-weight: normal; border-radius: 0px; cursor: pointer; box-shadow: 2px 2px 0px #000000; outline: none;">
+              Enviar código
+            </button>
+          </div>
+
+          <div style="text-align: left; margin-bottom: 20px;">
+            <label style="font-size: 16px; color: #000000; font-weight: normal; display: block; margin-bottom: 4px;">Nueva contraseña</label>
+            <input type="password" [(ngModel)]="recoveryNewPass" style="width: 100%; height: 42px; padding: 5px 8px; border: 2px solid #000000; background: #ffffff; color: #000000; font-size: 16px; outline: none; border-radius: 0px;" />
+          </div>
+
+          <div style="text-align: left; margin-bottom: 45px;">
+            <label style="font-size: 16px; color: #000000; font-weight: normal; display: block; margin-bottom: 4px;">Confirmar contraseña</label>
+            <input type="password" [(ngModel)]="recoveryConfirmPass" style="width: 100%; height: 42px; padding: 5px 8px; border: 2px solid #000000; background: #ffffff; color: #000000; font-size: 16px; outline: none; border-radius: 0px;" />
+          </div>
+
+          <div style="padding: 0 15px;">
+            <button (click)="ejecutarActualizacion(modalActualizar)" style="width: 100%; height: 46px; background: #ffffff; color: #000000; border: 2px solid #000000; font-size: 18px; font-weight: normal; border-radius: 0px; cursor: pointer; box-shadow: 3px 3px 0px #000000; outline: none;">
+              Actualizar
+            </button>
+          </div>
+
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

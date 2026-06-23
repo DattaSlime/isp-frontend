@@ -1,0 +1,343 @@
+<ion-header class="netacad-header">
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="modoCursoActivo && subtemaSeleccionado">
+      <ion-button color="primary" (click)="subtemaSeleccionado = null" class="back-btn-app">
+        <ion-icon name="arrow-back-outline" slot="start"></ion-icon> Índices
+      </ion-button>
+    </ion-buttons>
+
+    <ion-buttons slot="start" *ngIf="modoCursoActivo && !subtemaSeleccionado">
+      <ion-button color="primary" (click)="regresarAlDashboard()" class="back-btn-app">
+        <ion-icon name="arrow-back-outline" slot="start"></ion-icon> Volver al inicio
+      </ion-button>
+    </ion-buttons>
+    
+    <ion-title class="course-title">
+      {{ modoCursoActivo ? (subtemaSeleccionado ? subtemaSeleccionado.titulo : nombreCurso) : 'Gestión de Seguridad (SST)' }}
+    </ion-title>
+
+    <div slot="end" class="header-controls" *ngIf="modoCursoActivo && !subtemaSeleccionado">
+      <span class="progress-label">Progreso:</span>
+      <div class="progress-badge">{{ progresoGlobal }}%</div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="netacad-content">
+
+  <div *ngIf="modoCursoActivo" class="mobile-container ion-padding">
+    
+    <div *ngIf="!subtemaSeleccionado" class="animate__animated animate__fadeIn">
+      <div class="panel-inner-header">
+        <ion-icon name="list-outline"></ion-icon>
+        <h2>Estructura del Curso</h2>
+      </div>
+
+      <ion-accordion-group class="netacad-accordion-group" [value]="'modulo-1'">
+        <ion-accordion *ngFor="let mod of modulos" [value]="'modulo-' + mod.id" class="netacad-modulo-card">
+          <ion-item slot="header" lines="none" class="modulo-header-item">
+            <div class="modulo-header-content">
+              <span class="modulo-title">{{ mod.titulo }}</span>
+              <div class="netacad-progress-container">
+                <div class="netacad-progress-bar-wrapper">
+                  <div class="netacad-progress-bar" [style.width.%]="mod.progreso" [class.completed]="mod.progreso === 100"></div>
+                </div>
+                <span class="progress-text">{{ mod.progreso }}%</span>
+              </div>
+            </div>
+          </ion-item>
+
+          <div slot="content" class="modulo-subtemas-list">
+            <div *ngFor="let sub of mod.subtemas" 
+                 [ngClass]="{'subtema-row': true, 'active-theme': subtemaSeleccionado?.id === sub?.id}" 
+                 (click)="seleccionarSubtema(sub)">
+              <div class="subtema-left">
+                <div class="status-icon" [class.success]="sub.completado">
+                  <ion-icon [name]="sub.completado ? 'checkmark-circle' : (sub.esExamen ? 'school-outline' : 'ellipse-outline')"></ion-icon>
+                </div>
+                <span class="subtema-title" [class.exam-highlight]="sub.esExamen">{{ sub.titulo }}</span>
+              </div>
+              <div class="subtema-right">
+                <span class="reading-progress" [class.done]="sub.completado">{{ sub.progresoLectura }}</span>
+              </div>
+            </div>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    </div>
+
+    <div *ngIf="subtemaSeleccionado" class="animate__animated animate__fadeIn">
+      
+      <div *ngIf="!subtemaSeleccionado.esExamen" class="content-viewer-card">
+        <div class="viewer-header">
+          <ion-icon name="book-outline"></ion-icon>
+          <span>Leyendo: Tema {{ subtemaSeleccionado.id }}</span>
+        </div>
+        <div class="viewer-body-html" [innerHTML]="subtemaSeleccionado.contenidoHtml"></div>
+        
+        <ion-button expand="block" shape="round" color="success" class="btn-send-report" (click)="subtemaSeleccionado = null">
+          <ion-icon name="checkmark-done-outline" slot="start"></ion-icon> FINALIZAR LECTURA
+        </ion-button>
+      </div>
+
+      <div *ngIf="subtemaSeleccionado.esExamen" class="content-viewer-card">
+        <div class="viewer-header exam-header-color" style="color: #8c52ff;">
+          <ion-icon name="school-outline"></ion-icon>
+          <span>Evaluación del Módulo</span>
+        </div>
+
+        <div class="exam-result-banner" *ngIf="subtemaSeleccionado.examenRendido" [class.approved]="subtemaSeleccionado?.notaFinal >= 70">
+          <ion-icon [name]="subtemaSeleccionado?.notaFinal >= 70 ? 'trophy-outline' : 'alert-circle-outline'"></ion-icon>
+          <div class="result-info">
+            <h4>Puntaje Obtenido: <span class="score-num">{{ subtemaSeleccionado?.notaFinal }}%</span></h4>
+            <p>{{ subtemaSeleccionado?.notaFinal >= 70 ? '¡Felicitaciones! Aprobaste la evaluación académica.' : 'No alcanzaste el mínimo aprobatorio (70%). Inténtalo de nuevo.' }}</p>
+          </div>
+        </div>
+
+        <div class="quiz-container">
+          <div class="question-block" *ngFor="let preg of subtemaSeleccionado.preguntas; let i = index">
+            <h4 class="question-title">Pregunta {{ i + 1 }}</h4>
+            <p class="question-text">{{ preg.enunciado }}</p>
+
+            <div class="options-list">
+              <div class="option-item" 
+                   *ngFor="let opcion of preg.opciones; let oIdx = index"
+                   (click)="!subtemaSeleccionado.examenRendido && preg.respuestaUsuarioIdx = oIdx"
+                   [ngClass]="{
+                     'selected': preg.respuestaUsuarioIdx === oIdx,
+                     'correct-highlight': subtemaSeleccionado.examenRendido && preg.respuestaCorrectaIdx === oIdx,
+                     'wrong-highlight': subtemaSeleccionado.examenRendido && preg.respuestaUsuarioIdx === oIdx && preg.respuestaCorrectaIdx !== oIdx
+                   }">
+                <div class="option-bullet">
+                  <span *ngIf="preg.respuestaUsuarioIdx !== oIdx">{{ ['A', 'B', 'C', 'D'][oIdx] }}</span>
+                  <ion-icon *ngIf="preg.respuestaUsuarioIdx === oIdx && !subtemaSeleccionado.examenRendido" name="checkmark"></ion-icon>
+                  <ion-icon *ngIf="subtemaSeleccionado.examenRendido && preg.respuestaCorrectaIdx === oIdx" name="checkmark-done"></ion-icon>
+                  <ion-icon *ngIf="subtemaSeleccionado.examenRendido && preg.respuestaUsuarioIdx === oIdx && preg.respuestaCorrectaIdx !== oIdx" name="close"></ion-icon>
+                </div>
+                <span class="option-text">{{ opcion }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ion-button *ngIf="!subtemaSeleccionado.examenRendido" expand="block" shape="round" color="primary" class="btn-send-report" 
+                    (click)="evaluarExamenNetacad(subtemaSeleccionado)">
+          <ion-icon name="cloud-upload-outline" slot="start"></ion-icon> ENVIAR Y CALIFICAR
+        </ion-button>
+
+        <ion-button *ngIf="subtemaSeleccionado.examenRendido" expand="block" shape="round" color="medium" fill="outline" class="btn-send-report" 
+                    (click)="reintentarExamenNetacad(subtemaSeleccionado)">
+          <ion-icon name="refresh-outline" slot="start"></ion-icon> REINTENTAR EXAMEN
+        </ion-button>
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="!modoCursoActivo" class="mobile-container ion-padding">
+    
+    <div *ngIf="rolUsuario === 'Supervisor' || rolUsuario === 'Administrador'">
+      <div class="header-section">
+        <h1 class="page-title">Auditoría <span class="accent">Checklists</span></h1>
+        <p class="page-subtitle">Monitoreo de condiciones de seguridad diarias</p>
+      </div>
+
+      <div class="info-banner">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>Fecha de auditoría: <b>{{ fechaTexto }}</b></span>
+      </div>
+
+      <div class="audit-summary-card">
+        <div class="summary-item">
+          <span class="num completed">{{ totalCompletados }}</span>
+          <span class="lbl">Completados</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-item">
+          <span class="num pending">{{ totalPendientes }}</span>
+          <span class="lbl">Pendientes</span>
+        </div>
+      </div>
+
+      <div class="group-label">Reportes Recibidos Hoy</div>
+
+      <div class="admin-reports-list">
+        <div class="report-user-card" *ngFor="let rep of listaReportes">
+          <div class="card-avatar" [class.pending-avatar]="rep.estadoGeneral === 'pendiente'">
+            <ion-icon [name]="rep.estadoGeneral === 'pendiente' ? 'alert-circle-outline' : 'person-outline'"></ion-icon>
+          </div>
+          
+          <div class="card-info">
+            <h3 class="user-fullname">{{ rep.operario }}</h3>
+            <div class="meta-row">
+              <span class="meta-time">
+                <ion-icon name="time-outline"></ion-icon> {{ rep.hora }}
+              </span>
+              <span class="meta-details" *ngIf="rep.estadoGeneral !== 'pendiente'">
+                KM: {{ rep.km }} | Comb: {{ rep.comb }}
+              </span>
+            </div>
+          </div>
+
+          <div class="card-action">
+            <ion-button *ngIf="rep.estadoGeneral === 'pendiente'" color="danger" fill="clear" (click)="notificarOmiso(rep.operario)" class="btn-warn">
+              <ion-icon name="warning-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <div class="status-badge success-badge" *ngIf="rep.estadoGeneral !== 'pendiente'">
+              <ion-icon name="checkmark-circle"></ion-icon> Recibido
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="group-label" *ngIf="listaObservaciones && listaObservaciones.length > 0">Alertas y Observaciones Críticas</div>
+      <div class="observation-alerts-container" *ngFor="let obs of listaObservaciones; let i = index">
+        <div class="obs-card">
+          <div class="obs-header">
+            <span class="obs-user">{{ obs.operario }}</span>
+            <span class="obs-time">{{ obs.hora }}</span>
+          </div>
+          <p class="obs-text">{{ obs.detalle }}</p>
+          <div class="obs-footer">
+            <ion-button size="small" color="success" fill="clear" (click)="marcarComoRevisado()">
+              <ion-icon name="checkmark-circle" slot="start"></ion-icon> Atendido
+            </ion-button>
+            <ion-button size="small" color="danger" fill="clear" (click)="eliminarObservacion(i)">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="rolUsuario === 'Trabajador'">
+      <div class="header-section">
+        <h1 class="page-title">Checklist <span class="accent">Diario</span></h1>
+        <p class="page-subtitle">Verificación de seguridad previa al trabajo</p>
+      </div>
+
+      <div class="info-banner">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>Fecha de hoy: <b>{{ fechaTexto }}</b></span>
+      </div>
+
+      <div class="group-label">Datos de la Unidad Móvil</div>
+      <div class="compact-card ion-padding">
+        <div class="input-inline-group">
+          <div class="input-box">
+            <ion-icon name="speedometer-outline" class="input-icon"></ion-icon>
+            <ion-input type="number" placeholder="Kilometraje Inicial" [(ngModel)]="checklistData.kilometraje" class="custom-field"></ion-input>
+          </div>
+          <div class="input-box">
+            <ion-icon name="car-outline" class="input-icon"></ion-icon>
+            <ion-select placeholder="Combustible" [(ngModel)]="checklistData.combustible" interface="popover" class="custom-select">
+              <ion-select-option value="Full">Full</ion-select-option>
+              <ion-select-option value="3/4">3/4</ion-select-option>
+              <ion-select-option value="1/2">1/2</ion-select-option>
+              <ion-select-option value="1/4">1/4</ion-select-option>
+            </ion-select>
+          </div>
+        </div>
+      </div>
+
+      <div class="group-label">Equipos de Protección (EPP) y Entorno</div>
+      
+      <div class="card-item-container">
+        <div class="custom-row-card">
+          <div class="item-left">
+            <div class="icon-avatar protection-color">
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+            </div>
+            <div class="label-info">
+              <h4>Casco de Seguridad</h4>
+              <p>¿Cuenta con casco estructural?</p>
+            </div>
+          </div>
+          <div class="item-right-selectors">
+            <button [class.selected-bueno]="checklistData.casco === 'bueno'" (click)="checklistData.casco = 'bueno'" class="btn-state btn-b">Bueno</button>
+            <button [class.selected-malo]="checklistData.casco === 'malo'" (click)="checklistData.casco = 'malo'" class="btn-state btn-m">Malo</button>
+          </div>
+        </div>
+
+        <div class="custom-row-card">
+          <div class="item-left">
+            <div class="icon-avatar protection-color">
+              <ion-icon name="construct-outline"></ion-icon>
+            </div>
+            <div class="label-info">
+              <h4>Guantes Dieléctricos / Operativos</h4>
+              <p>¿Están en buen estado sin fisuras?</p>
+            </div>
+          </div>
+          <div class="item-right-selectors">
+            <button [class.selected-bueno]="checklistData.guantes === 'bueno'" (click)="checklistData.guantes = 'bueno'" class="btn-state btn-b">Bueno</button>
+            <button [class.selected-malo]="checklistData.guantes === 'malo'" (click)="checklistData.guantes = 'malo'" class="btn-state btn-m">Malo</button>
+          </div>
+        </div>
+
+        <div class="custom-row-card">
+          <div class="item-left">
+            <div class="icon-avatar protection-color">
+              <ion-icon name="shield-checkmark-outline"></ion-icon>
+            </div>
+            <div class="label-info">
+              <h4>Calzado de Seguridad</h4>
+              <p>¿Usa calzado punta de acero/aislante?</p>
+            </div>
+          </div>
+          <div class="item-right-selectors">
+            <button [class.selected-bueno]="checklistData.calzado === 'bueno'" (click)="checklistData.calzado = 'bueno'" class="btn-state btn-b">Bueno</button>
+            <button [class.selected-malo]="checklistData.calzado === 'malo'" (click)="checklistData.calzado = 'malo'" class="btn-state btn-m">Malo</button>
+          </div>
+        </div>
+
+        <div class="custom-row-card">
+          <div class="item-left">
+            <div class="icon-avatar environment-color">
+              <ion-icon name="car-outline"></ion-icon>
+            </div>
+            <div class="label-info">
+              <h4>Área de Trabajo / Unidad</h4>
+              <p>¿Área libre de obstáculos y limpia?</p>
+            </div>
+          </div>
+          <div class="item-right-selectors">
+            <button [class.selected-bueno]="checklistData.obstaculos === 'bueno'" (click)="checklistData.obstaculos = 'bueno'" class="btn-state btn-b">Bueno</button>
+            <button [class.selected-malo]="checklistData.obstaculos === 'malo'" (click)="checklistData.obstaculos = 'malo'" class="btn-state btn-m">Malo</button>
+          </div>
+        </div>
+
+        <div class="custom-row-card">
+          <div class="item-left">
+            <div class="icon-avatar environment-color">
+              <ion-icon name="flash-outline"></ion-icon>
+            </div>
+            <div class="label-info">
+              <h4>Iluminación y Luces</h4>
+              <p>¿Nivel de visibilidad y luces óptimo?</p>
+            </div>
+          </div>
+          <div class="item-right-selectors">
+            <button [class.selected-bueno]="checklistData.iluminacion === 'bueno'" (click)="checklistData.iluminacion = 'bueno'" class="btn-state btn-b">Bueno</button>
+            <button [class.selected-malo]="checklistData.iluminacion === 'malo'" (click)="checklistData.iluminacion = 'malo'" class="btn-state btn-m">Malo</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="group-label" style="color: #22c55e;">Observaciones adicionales</div>
+      <div class="textarea-container">
+        <ion-textarea 
+          placeholder="Escriba aquí si detectó algún riesgo, avería o inconveniente..." 
+          [(ngModel)]="checklistData.observationTexto" 
+          rows="3" 
+          class="custom-textarea">
+        </ion-textarea>
+      </div>
+
+      <ion-button expand="block" shape="round" color="primary" class="btn-send-report" (click)="enviarChecklist()">
+        <ion-icon name="cloud-upload-outline" slot="start"></ion-icon> ENVIAR REPORTE DIARIO
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

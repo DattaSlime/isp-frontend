@@ -1,0 +1,86 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs"></ion-back-button>
+    </ion-buttons>
+    <ion-title style="font-weight: bold; font-size: 17px;">
+      📋 Declaración Diaria de SST
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding" style="--background: #f7f9fc;">
+
+  <div style="background-color: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; border-left: 5px solid #ffc107;">
+    <h5 style="margin: 0 0 5px 0; font-weight: bold; color: #333; display: flex; align-items: center;">
+      <ion-icon name="clipboard-outline" style="margin-right: 8px; color: #ffc107; font-size: 20px Haus;"></ion-icon>
+      Control de Ingreso Obligatorio
+    </h5>
+    <p style="margin: 0; color: #666; font-size: 13px; line-height: 1.4;">
+      De acuerdo con la Ley N° 29783 de SST de Perú, debe declarar con transparencia su estado y equipamiento antes del inicio de su jornada.
+    </p>
+  </div>
+
+  <ion-list lines="inset" style="background: transparent;">
+
+    <ion-listHeader style="padding-left: 5px; margin-bottom: 5px;">
+      <ion-label style="font-weight: bold; color: #1e1e1e; font-size: 15px;">1. Equipamiento e Infraestructura</ion-label>
+    </ion-listHeader>
+
+    <ion-item style="--background: #fff; border-radius: 10px; margin-bottom: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+      <ion-label style="font-size: 14px; color: #444;">¿Cuenta con EPP completo y adecuado?</ion-label>
+      <ion-toggle slot="end" color="success" [(ngModel)]="usaEppAdecuado"></ion-toggle>
+    </ion-item>
+
+    <ion-item style="--background: #fff; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.02);">
+      <ion-label style="font-size: 14px; color: #444;">¿Herramientas/Maquinarias óptimas?</ion-label>
+      <ion-toggle slot="end" color="success" [(ngModel)]="herramientasEnBuenEstado"></ion-toggle>
+    </ion-item>
+
+    <ion-listHeader style="padding-left: 5px; margin-bottom: 5px;">
+      <ion-label style="font-weight: bold; color: #1e1e1e; font-size: 15px;">2. Condición Física del Trabajador</ion-label>
+    </ion-listHeader>
+
+    <ion-radio-group [(ngModel)]="estadoSaludActual">
+      <ion-item style="--background: #fff; border-radius: 10px 10px 0 0; margin-bottom: 1px; box-shadow: 0 2px 6px rgba(0,0,0,0.01);">
+        <ion-radio value="Optimo" color="success" labelPlacement="end">
+          <span style="font-size: 14px; color: #333;">Excelente / En condiciones óptimas 👍</span>
+        </ion-radio>
+      </ion-item>
+
+      <ion-item style="--background: #fff; margin-bottom: 1px;">
+        <ion-radio value="Regular" color="warning" labelPlacement="end">
+          <span style="font-size: 14px; color: #333;">Desgaste físico leve / Cansancio ⏳</span>
+        </ion-radio>
+      </ion-item>
+
+      <ion-item style="--background: #fff; border-radius: 0 0 10px 10px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02);">
+        <ion-radio value="Malestar" color="danger" labelPlacement="end">
+          <span style="font-size: 14px; color: #333;">Con malestar general / Indispuesto 🚨</span>
+        </ion-radio>
+      </ion-item>
+    </ion-radio-group>
+
+    <ion-listHeader style="padding-left: 5px; margin-bottom: 5px;">
+      <ion-label style="font-weight: bold; color: #1e1e1e; font-size: 15px;">3. Observaciones Adicionales</ion-label>
+    </ion-listHeader>
+
+    <ion-item style="--background: #fff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); padding: 5px 0;">
+      <ion-textarea rows="3" 
+                    placeholder="Detalle algún desperfecto en su zona de materiales o síntoma de salud si lo considera necesario..." 
+                    [(ngModel)]="observacionesAdicionales"
+                    style="font-size: 13px; color: #555;">
+      </ion-textarea>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-button expand="block" 
+              color="dark" 
+              (click)="guardarChecklist()" 
+              style="font-weight: bold; margin-top: 25px; height: 48px; --border-radius: 10px; font-size: 14px;">
+    <ion-icon slot="start" name="save-outline"></ion-icon>
+    ENVIAR DECLARACIÓN JURADA
+  </ion-button>
+
+</ion-content>

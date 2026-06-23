@@ -1,0 +1,36 @@
+<ion-content class="ion-padding ion-text-center dark-reg">
+  <div class="reg-wrapper">
+    <h1 class="brand-title">ISP PERU</h1>
+    <h3 class="reg-subtitle">Registrar Empresa</h3>
+
+    <div class="form-container">
+      <ion-item class="custom-input" lines="none">
+        <ion-input label="Nombre de la empresa" labelPlacement="stacked" placeholder="Nombre comercial" class="black-text"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input ion-margin-top" lines="none">
+        <ion-input label="RUC" labelPlacement="stacked" type="number" placeholder="20XXXXXXXXX" class="black-text"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input ion-margin-top" lines="none">
+        <ion-input label="Dirección" labelPlacement="stacked" placeholder="Calle, Distrito" class="black-text"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input ion-margin-top" lines="none">
+        <ion-input label="Teléfono" labelPlacement="stacked" type="tel" placeholder="999888777" class="black-text"></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input ion-margin-top" lines="none">
+        <ion-input label="Correo corporativo" labelPlacement="stacked" type="email" placeholder="admin@empresa.com" class="black-text"></ion-input>
+      </ion-item>
+    </div>
+
+    <ion-button expand="block" shape="round" color="secondary" class="btn-reg ion-margin-top" routerLink="/login">
+      CREAR EMPRESA
+    </ion-button>
+
+    <p class="white-text ion-margin-top" routerLink="/login" style="cursor: pointer;">
+      <ion-text color="light">Volver al inicio</ion-text>
+    </p>
+  </div>
+</ion-content>

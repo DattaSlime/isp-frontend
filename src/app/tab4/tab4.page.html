@@ -1,0 +1,186 @@
+<ion-content class="ion-padding modern-page">
+  <div class="mobile-container">
+    
+    <div class="header-section">
+      <h1 class="page-title">
+        Centro de <span class="accent" [class.supervisor-accent]="rolUsuario === 'Supervisor'">Alertas</span>
+      </h1>
+      <p class="page-subtitle">
+        {{ rolUsuario === 'Supervisor' ? 'Panel de control e incidentes en planta' : 'Notificaciones de seguridad y requerimientos en tiempo real' }}
+      </p>
+    </div>
+
+    <div *ngIf="rolUsuario === 'Trabajador'" class="worker-report-box" style="background: #ffffff; border-radius: 16px; padding: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+      
+      <ion-segment [(ngModel)]="tipoReporteActivo" color="danger" mode="ios" style="margin-bottom: 16px;">
+        <ion-segment-button value="incidencia">
+          <ion-label style="font-size: 12px; font-weight: 600;">⚠️ Incidencia</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="material">
+          <ion-label style="font-size: 12px; font-weight: 600;">📦 Falta Material</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <div *ngIf="tipoReporteActivo === 'incidencia'">
+        <div class="box-header" style="display: flex; align-items: center; gap: 8px; color: #dc2626; font-weight: bold; font-size: 14px; margin-bottom: 12px;">
+          <ion-icon name="alert-circle-outline" style="font-size: 20px;"></ion-icon>
+          <span>GENERAR REPORTE DE EMERGENCIA</span>
+        </div>
+
+        <div class="field-group">
+          <label>Clasificación del peligro</label>
+          <div class="input-container select-pad">
+            <ion-select [(ngModel)]="nuevoIncidente.tipo" interface="popover">
+              <ion-select-option value="CRÍTICO">🚨 Riesgo Crítico (Parada de Labores)</ion-select-option>
+              <ion-select-option value="ADVERTENCIA">⚠️ Advertencia / Condición Insegura</ion-select-option>
+            </ion-select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>¿Qué ocurre? (Título breve)</label>
+          <div class="input-container">
+            <input type="text" [(ngModel)]="nuevoIncidente.titulo" placeholder="Ej. Fuga de agua o cables expuestos">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Zona o Planta afectada</label>
+          <div class="input-container select-pad">
+            <ion-select [(ngModel)]="nuevoIncidente.ubicacion" interface="popover">
+              <ion-select-option value="Almacén Central - Sector B">Almacén Central - Sector B</ion-select-option>
+              <ion-select-option value="Zona de Despacho">Zona de Despacho</ion-select-option>
+              <ion-select-option value="Oficinas Piso 2">Oficinas Piso 2</ion-select-option>
+              <ion-select-option value="Patio de Maniobras Exterior">Patio de Maniobras Exterior</ion-select-option>
+            </ion-select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Detalles de la observación técnica</label>
+          <div class="input-container">
+            <textarea [(ngModel)]="nuevoIncidente.descripcion" rows="3" placeholder="Describe el riesgo detectado..."></textarea>
+          </div>
+        </div>
+
+        <ion-button expand="block" shape="round" color="danger" class="btn-submit-incident" (click)="registrarIncidenciaCritica()">
+          <ion-icon name="send-outline" slot="start" style="font-size: 16px; margin-right: 4px;"></ion-icon>
+          DESPACHAR REPORTE URGENTE
+        </ion-button>
+      </div>
+
+      <div *ngIf="tipoReporteActivo === 'material'">
+        <div class="box-header" style="display: flex; align-items: center; gap: 8px; color: #f59e0b; font-weight: bold; font-size: 14px; margin-bottom: 12px;">
+          <ion-icon name="cube-outline" style="font-size: 20px;"></ion-icon>
+          <span>NOTIFICAR FALTA DE MATERIALES / EPP</span>
+        </div>
+
+        <div class="field-group">
+          <label>Material o Insumo Agotado</label>
+          <div class="input-container">
+            <input type="text" [(ngModel)]="nuevoMaterialFaltante.material" placeholder="Ej. Guantes de nitrilo, Cinta de embalaje, etc.">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Cantidad estimada faltante o Urgencia</label>
+          <div class="input-container select-pad">
+            <ion-select [(ngModel)]="nuevoMaterialFaltante.urgencia" interface="popover">
+              <ion-select-option value="ALTA">🔴 Alta (Detiene la producción)</ion-select-option>
+              <ion-select-option value="MEDIA">🟡 Media (Stock mínimo / Previsión)</ion-select-option>
+            </ion-select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>¿En qué Zona / Línea se requiere?</label>
+          <div class="input-container select-pad">
+            <ion-select [(ngModel)]="nuevoMaterialFaltante.ubicacion" interface="popover">
+              <ion-select-option value="Almacén Central - Sector B">Almacén Central - Sector B</ion-select-option>
+              <ion-select-option value="Zona de Despacho">Zona de Despacho</ion-select-option>
+              <ion-select-option value="Oficinas Piso 2">Oficinas Piso 2</ion-select-option>
+              <ion-select-option value="Patio de Maniobras Exterior">Patio de Maniobras Exterior</ion-select-option>
+            </ion-select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label>Comentarios adicionales</label>
+          <div class="input-container">
+            <textarea [(ngModel)]="nuevoMaterialFaltante.comentario" rows="3" placeholder="Ej. Quedan solo 2 cajas en el estante secundario..."></textarea>
+          </div>
+        </div>
+
+        <ion-button expand="block" shape="round" color="warning" style="--color: white; font-weight: bold;" (click)="registrarMaterialFaltante()">
+          <ion-icon name="cart-outline" slot="start" style="font-size: 16px; margin-right: 4px;"></ion-icon>
+          SOLICITAR REABASTECIMIENTO
+        </ion-button>
+      </div>
+
+    </div>
+
+    <div *ngIf="rolUsuario === 'Supervisor'">
+      <div class="section-label" style="font-weight: bold; font-size: 14px; margin-bottom: 8px; color: #1e293b;">
+        ⚠️ Alertas de Vencimiento de Insumos y Equipos
+      </div>
+      
+      <div class="scrollable-workers-container" style="max-height: 200px; overflow-y: auto; background: #f8fafc; border-radius: 12px; padding: 8px; margin-bottom: 16px;">
+        <div *ngIf="listaInsumos.length === 0" style="text-align: center; color: #737888; font-size: 12px; padding: 15px;">
+          No hay alertas de insumos registrados.
+        </div>
+
+        <div *ngFor="let insumo of listaInsumos" style="padding: 12px; margin-bottom: 6px; background: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h4 style="font-size: 13px; font-weight: 600; margin: 0; color: #1e2022;">{{ insumo.nombre }}</h4>
+            <p style="font-size: 11px; margin: 2px 0 0; color: #64748b;">Lote: {{ insumo.lote }} • Vence: {{ insumo.fechaVencimiento }}</p>
+          </div>
+          <ion-badge [color]="insumo.colorAlerta" style="font-size: 10px; padding: 5px 8px; border-radius: 6px;">
+            {{ insumo.estadoCalculado }}
+          </ion-badge>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Historial de Alertas e Incidencias</div>
+
+    <div *ngIf="listaIncidencias.length === 0" style="text-align: center; padding: 40px 20px; color: #737888;">
+      <ion-icon name="alert-circle-outline" style="font-size: 32px; color: #cbd5e1; margin-bottom: 6px;"></ion-icon>
+      <p style="margin: 0; font-size: 13px;">No existen reportes activos en este turno.</p>
+    </div>
+
+    <ion-card *ngFor="let item of listaIncidencias; let i = index" 
+              class="alert-detail-card"
+              [style.border-left]="item.tipo === 'MATERIAL' ? '5px solid #f59e0b' : (item.tipo === 'CRÍTICO' ? '5px solid #dc2626' : '5px solid #eab308')">
+      <ion-card-content>
+        <div class="alert-top-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <ion-badge [color]="item.tipo === 'CRÍTICO' ? 'danger' : (item.tipo === 'MATERIAL' ? 'warning' : 'toggle')" [style.color]="item.tipo === 'MATERIAL' ? '#ffffff' : ''">
+            {{ item.tipo }}
+          </ion-badge>
+          <span class="alert-time" style="font-size: 11px; color: #64748b;">
+            <ion-icon name="time-outline" style="vertical-align: middle; margin-right: 2px;"></ion-icon>
+            {{ item.tiempo }}
+          </span>
+        </div>
+        
+        <h3 class="alert-headline" style="font-size: 15px; font-weight: bold; margin: 0 0 4px 0; color: #1e293b;">{{ item.titulo }}</h3>
+        
+        <p class="alert-reporter" style="font-size: 12px; color: #64748b; margin: 0 0 6px 0;">Reportado por: <span style="font-weight: 600; color: #334155;">{{ item.remitente || 'Operario de Planta' }}</span></p>
+        
+        <p class="alert-description" style="font-size: 13px; color: #475569; margin: 0 0 8px 0;">{{ item.descripcion }}</p>
+        
+        <div class="alert-footer" style="display: flex; justify-content: space-between; align-items: center;">
+          <div style="display: flex; align-items: center; gap: 4px; color: #64748b; font-size: 12px;">
+            <ion-icon name="location-outline"></ion-icon> 
+            <span>{{ item.ubicacion }}</span>
+          </div>
+          
+          <ion-button *ngIf="rolUsuario === 'Supervisor'" fill="clear" size="small" color="success" style="margin: 0; font-weight: 600; font-size: 12px;" (click)="resolverIncidente(i)">
+            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+            {{ item.tipo === 'MATERIAL' ? 'Surtido' : 'Solventar' }}
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+</ion-content>

@@ -1,0 +1,237 @@
+.modern-page {
+  --background: #f4f6f9;
+}
+
+.mobile-container {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 12px 8px; 
+}
+
+.page-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f172a; 
+  margin: 10px 0 2px 5px;
+  
+  .accent { 
+    color: #dc2626; 
+    
+    &.supervisor-accent {
+      color: #3880ff; 
+    }
+  } 
+}
+
+.page-subtitle {
+  font-size: 0.9rem;
+  color: #475569; 
+  margin: 0 0 20px 5px;
+}
+
+.section-label {
+  font-weight: 700;
+  color: #0f172a; 
+  font-size: 1.05rem;
+  padding-left: 5px;
+  margin: 24px 0 12px 0;
+}
+
+/* ========================================== */
+/* PANEL DE REPORTE DEL TRABAJADOR            */
+/* ========================================== */
+.worker-report-box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+
+  .box-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    color: #dc2626;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+
+  .field-group {
+    margin-bottom: 12px;
+    
+    &:last-of-type {
+      margin-bottom: 16px;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: bold;
+      color: #475569;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .input-container {
+      background: #f4f6f9;
+      border-radius: 10px;
+      padding: 10px;
+
+      &.select-pad {
+        padding: 0px 4px; /* Ajuste fino para la altura del select */
+      }
+
+      input {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font-size: 13.5px;
+        outline: none;
+        color: #0f172a;
+
+        &::placeholder {
+          color: #94a3b8;
+        }
+      }
+
+      textarea {
+        width: 100%;
+        border: none;
+        background: transparent;
+        font-size: 13px;
+        outline: none;
+        resize: none;
+        color: #0f172a;
+
+        &::placeholder {
+          color: #94a3b8;
+        }
+      }
+
+      /* SOLUCIÓN DIRECTA PARA EL COMBO BOX (ION-SELECT) */
+      ion-select {
+        font-size: 13.5px;
+        width: 100%;
+        min-height: 40px;
+        --color: #0f172a !important; /* Texto principal oscuro */
+        --placeholder-color: #64748b !important;
+        --placeholder-opacity: 1;
+
+        /* Forzar color en los elementos internos del Shadow DOM de Ionic */
+        &::part(text) {
+          color: #0f172a !important;
+          font-weight: 500;
+        }
+
+        &::part(icon) {
+          color: #64748b !important; /* Icono de flecha visible */
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .btn-submit-incident {
+    font-weight: 700;
+    height: 44px;
+    font-size: 13px;
+    margin: 0;
+  }
+}
+
+/* ========================================== */
+/* TARJETAS DE ALERTAS GENERALES              */
+/* ========================================== */
+.alert-detail-card {
+  margin: 0 0 14px 0; 
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+  border-left: 5px solid transparent;
+
+  &.danger-border { border-left-color: #dc2626; }
+  &.warning-border { border-left-color: #ffc409; }
+
+  ion-card-content {
+    padding: 16px;
+    color: initial; 
+  }
+
+  .alert-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    
+    ion-badge {
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      padding: 5px 8px;
+      border-radius: 6px;
+
+      &.dark-text { 
+        --color: #000000 !important; 
+        color: #000000 !important; 
+      }
+    }
+
+    .alert-time { 
+      font-size: 0.8rem; 
+      color: #64748b; 
+      font-weight: 600; 
+    }
+  }
+
+  .alert-headline {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a; 
+    margin: 6px 0 2px 0;
+  }
+
+  .alert-reporter {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 0 0 10px 0;
+    font-weight: 500;
+    
+    span {
+      font-weight: 700;
+      color: #475569;
+    }
+  }
+
+  .alert-description {
+    font-size: 0.9rem;
+    color: #334155; 
+    line-height: 1.45;
+    text-align: left;
+    margin: 0;
+  }
+
+  .alert-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; 
+    gap: 6px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+    color: #475569; 
+    font-size: 0.85rem;
+    font-weight: 600;
+    
+    div {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    ion-icon { 
+      color: #64748b; 
+      font-size: 1.1rem; 
+    }
+  }
+}

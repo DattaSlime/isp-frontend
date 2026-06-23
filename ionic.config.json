@@ -1,0 +1,7 @@
+{
+  "name": "ProyectoISP",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

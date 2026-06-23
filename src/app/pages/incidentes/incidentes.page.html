@@ -1,0 +1,87 @@
+<ion-header [translucent]="true">
+  <ion-toolbar [color]="tipoIncidencia === 'Alta' ? 'danger' : 'success'">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      {{ tipoIncidencia === 'Alta' ? '🚨 Reportar Incidencia Crítica' : '📋 Reportar Incidencia Ordinaria' }}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  
+  <div style="margin-bottom: 20px; padding: 12px; border-radius: 8px; transition: 0.3s;"
+       [style.background-color]="tipoIncidencia === 'Alta' ? '#fde8e8' : '#eafaf1'">
+    <h5 style="font-weight: bold; margin-top: 0; margin-bottom: 5px;"
+        [style.color]="tipoIncidencia === 'Alta' ? '#e41e1e' : '#2e7d32'">
+      Gestión de Riesgos e Infraestructura - ISP PERU
+    </h5>
+    <p style="color: #444; font-size: 13px; margin: 0;">
+      Seleccione el nivel del suceso. Si involucra peligro inmediato para el personal o daños severos en materiales, marque "Alta / Crítica".
+    </p>
+  </div>
+
+  <ion-list lines="full">
+    
+    <ion-item>
+      <ion-select label="Clasificación del Evento" [(ngModel)]="tipoIncidencia">
+        <ion-select-option value="Tranquila">Ordinaria / Tranquila (Bajo Riesgo) 📋</ion-select-option>
+        <ion-select-option value="Alta">Alta / Crítica (Emergencia Inminente) 🚨</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-input type="text" 
+                 label="Título de la Incidencia" 
+                 labelPlacement="floating" 
+                 placeholder="Ej. Desgaste en Materiales, Cable expuesto, EPP roto"
+                 [(ngModel)]="tituloIncidente">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-select label="Área / Ubicación del suceso" 
+                 labelPlacement="floating"
+                 placeholder="Seleccione la zona afectada" 
+                 [(ngModel)]="areaSeleccionadaId">
+        <ion-select-option *ngFor="let area of listaAreas" [value]="area.area_id">
+          {{ area.nombre_area }} ({{ area.ubicacion_planta }})
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-textarea label="Descripción detallada de la situación" 
+                    labelPlacement="floating" 
+                    rows="4" 
+                    placeholder="Describa el desperfecto técnico o la situación observada en la planta..."
+                    [(ngModel)]="descripcionDetallada">
+      </ion-textarea>
+    </ion-item>
+  </ion-list>
+
+  <div style="text-align: center; margin-top: 25px; margin-bottom: 25px;">
+    <ion-button type="button" fill="outline" color="dark" (click)="adjuntarFoto()">
+      <ion-icon slot="start" name="camera-outline"></ion-icon>
+      Adjuntar Evidencia Fotográfica
+    </ion-button>
+    
+    <div *ngIf="fotoEvidencia" style="margin-top: 15px; border-radius: 12px; padding: 5px;">
+      <p style="color: #2dd36f; font-size: 14px; font-weight: bold; margin-bottom: 10px;">
+        <ion-icon name="checkmark-circle-outline"></ion-icon> Foto vinculada al reporte con éxito.
+      </p>
+      <img [src]="fotoEvidencia" 
+           alt="Evidencia Materiales ISP" 
+           style="width: 85%; max-width: 280px; border-radius: 12px; border: 3px solid #ccc; box-shadow: 0px 4px 12px rgba(0,0,0,0.15);" />
+    </div>
+  </div>
+
+  <ion-button expand="block" 
+              [color]="tipoIncidencia === 'Alta' ? 'danger' : 'success'" 
+              (click)="enviarReporte()" 
+              style="font-weight: bold; margin-top: 15px; height: 45px;">
+    {{ tipoIncidencia === 'Alta' ? 'EMITIR ALERTA DE EMERGENCIA CRÍTICA' : 'REGISTRAR INCIDENCIA ORDINARIA' }}
+  </ion-button>
+
+</ion-content>

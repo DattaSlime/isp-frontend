@@ -1,0 +1,26 @@
+.modern-tab-bar {
+  --background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.04);
+  height: 65px;
+}
+
+ion-tab-button {
+  --color: #64748b; // Gris elegante para botones inactivos
+  --color-selected: #3880ff; // Azul corporativo para la pestaña activa
+  
+  ion-icon {
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+    transition: transform 0.2s ease;
+  }
+
+  ion-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  &.tab-selected ion-icon {
+    transform: translateY(-2px); // Pequeño efecto dinámico al seleccionarlo
+  }
+}

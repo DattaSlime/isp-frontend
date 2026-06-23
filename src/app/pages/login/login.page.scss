@@ -1,0 +1,86 @@
+// ========================================================
+// REGLAS ESTILÍSTICAS DE LA APLICACIÓN CORPORATIVA ISP
+// ========================================================
+.app-clean-modal {
+  // Acota el modal para que no sufra deformaciones en pantallas grandes
+  --width: 92%;
+  --max-width: 380px;
+  --height: auto;
+  --max-height: 85%;
+  --border-radius: 24px; // Bordes redondeados idénticos a tus componentes
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  .modal-clean-toolbar {
+    --background: #ffffff;
+    --border-width: 0px !important;
+    padding: 12px 12px 0 12px;
+
+    .btn-cancelar-clean {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8 !important; // Gris sutil corporativo
+      letter-spacing: 0.8px;
+    }
+  }
+
+  .modal-clean-content {
+    --background: #ffffff;
+  }
+}
+
+// Estructura interna adaptada al estilo de tu Centro de Alertas
+.clean-form-wrapper {
+  background-color: #ffffff;
+  padding: 0px 24px 32px 24px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+
+  .logo-clean-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+
+    img {
+      height: 60px; // Tamaño ideal para tu logo original de ISP PERÚ
+      max-width: 100%;
+      object-fit: contain;
+    }
+  }
+
+  .modal-clean-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    text-align: center;
+    margin: 0 0 24px 0;
+    letter-spacing: -0.5px;
+  }
+
+  .plain-vertical-spacing {
+    margin-bottom: 20px;
+  }
+
+  .action-link-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+    margin-bottom: 14px;
+
+    .btn-send-code {
+      --color: #3b82f6; // Enlace azul limpio nativo
+      font-weight: 600;
+      font-size: 13px;
+      margin: 0;
+    }
+  }
+
+  .submit-clean-container {
+    margin-top: 25px;
+    
+    // Extiende tu clase nativa para asegurar consistencia
+    .btn-iniciar {
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+  }
+}
