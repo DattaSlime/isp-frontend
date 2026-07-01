@@ -1,0 +1,167 @@
+.viewer-page {
+
+  --background: #eef2f7;
+
+}
+
+.viewer-container{
+
+  max-width:430px;
+
+  margin:auto;
+
+  padding:18px;
+
+}
+
+.course-info{
+
+  background:white;
+
+  border-radius:18px;
+
+  padding:18px;
+
+  margin-bottom:18px;
+
+  box-shadow:0 6px 18px rgba(0,0,0,.05);
+
+}
+
+.course-info h2{
+
+  margin:0;
+
+  font-size:22px;
+
+  font-weight:700;
+
+  color:#1e293b;
+
+}
+
+.course-info p{
+
+  margin-top:8px;
+
+  color:#64748b;
+
+  font-size:14px;
+
+}
+
+.pdf-container{
+
+  background:white;
+
+  border-radius:18px;
+
+  min-height:520px;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  overflow:auto;
+
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+  margin-bottom:20px;
+
+}
+
+#pdfCanvas{
+
+  width:100%;
+
+  height:auto;
+
+}
+
+.controls{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:20px;
+
+}
+
+.controls span{
+
+  font-weight:700;
+
+  color:#334155;
+
+}
+
+.progress-section{
+
+  margin-bottom:22px;
+
+}
+
+.progress-section p{
+
+  margin-top:10px;
+
+  text-align:center;
+
+  font-weight:700;
+
+  color:#2563eb;
+
+}
+
+.exam-button{
+
+  height:54px;
+
+  font-size:17px;
+
+  font-weight:700;
+
+  --border-radius:14px;
+
+}
+
+ion-toolbar{
+
+  --background:#2563eb;
+
+  --color:white;
+
+}
+
+ion-title{
+
+  font-weight:700;
+
+}
+
+@media (max-width:480px){
+
+.viewer-container{
+
+padding:12px;
+
+}
+
+.pdf-container{
+
+min-height:420px;
+
+}
+
+.course-info h2{
+
+font-size:20px;
+
+}
+
+}

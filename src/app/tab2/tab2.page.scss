@@ -6,6 +6,14 @@
   max-width: 430px;
   margin: 0 auto;
   padding: 10px 5px;
+  transition: max-width 0.3s ease;
+
+  // Rompe el límite de ancho móvil solo cuando el entorno Netacad está activo 
+  // para permitir la maquetación de pantalla dividida cómoda en pantallas grandes.
+  &:has(.netacad-workspace) {
+    max-width: 100% !important;
+    padding: 0;
+  }
 }
 
 .header-section {
@@ -40,169 +48,34 @@
   font-size: 1rem;
   padding-left: 5px;
   margin-bottom: 12px;
-  text-align: left;
 }
 
-/* ========================================== */
-/* ESTILOS VISTA TRABAJADOR (REPRODUCTOR)     */
-/* ========================================== */
-.course-card {
-  margin: 0 0 20px 0;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-  background: #ffffff;
-  border: none;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-
-  &:active {
-    transform: scale(0.98);
-  }
-
-  .course-thumb-container {
-    height: 140px;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    background: #1e293b;
-
-    .course-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    
-    .course-tag {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      font-weight: 700;
-      border-radius: 6px;
-      padding: 5px 9px;
-      --background: #3880ff;
-      z-index: 3;
-      box-shadow: 0 2px 6px rgba(56, 128, 255, 0.3);
-    }
-
-    .video-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
-
-      ion-icon {
-        font-size: 3rem;
-        color: rgba(255, 255, 255, 0.9);
-        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-      }
-    }
-  }
-
-  .course-content-box {
-    padding: 16px;
-    text-align: left;
-  }
-
-  .course-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: #334155;
-    margin: 0 0 12px 0;
-    line-height: 1.4;
-  }
-
-  .progress-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    
-    ion-progress-bar {
-      height: 8px;
-      border-radius: 99px;
-      --progress-background: #e2e8f0;
-      --buffer-background: #e2e8f0;
-    }
-    
-    .pct-text {
-      font-weight: 700;
-      font-size: 0.85rem;
-      color: #3880ff;
-      min-width: 32px;
-      text-align: right;
-    }
-  }
-}
-
-.new-course-item {
-  --background: #ffffff;
-  border-radius: 16px;
-  margin-bottom: 12px;
-  padding: 6px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-  
-  .new-thumb {
-    --border-radius: 12px;
-    width: 50px;
-    height: 50px;
-  }
-
-  .new-label-box {
-    text-align: left;
-    padding-left: 4px;
-    h2 { 
-      font-weight: 700; 
-      font-size: 0.95rem; 
-      color: #1e293b;
-      margin: 0;
-    }
-    p { 
-      font-size: 0.8rem; 
-      color: #64748b;
-      margin: 3px 0 0 0;
-    }
-  }
-
-  .btn-add-course {
-    --color: #3880ff;
-    font-size: 1.4rem;
-  }
-}
-
-/* ========================================== */
-/* ESTILOS VISTA SUPERVISOR                  */
-/* ========================================== */
+/* ==========================================================================
+   KPI DASHBOARD (SUPERVISOR)
+   ========================================================================== */
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .kpi-card {
   background: #ffffff;
-  padding: 14px 6px;
-  border-radius: 14px;
+  border-radius: 16px;
+  padding: 12px 8px;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.02);
   display: flex;
   flex-direction: column;
+  justify-content: center;
 
   .kpi-num {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
     font-weight: 800;
-    color: #2dd36f;
+    color: #10b981; // Success
     
-    &.warning { color: #f97316; }
+    &.warning { color: #f59e0b; }
     &.danger { color: #ef4444; }
   }
 
@@ -216,11 +89,29 @@
   }
 }
 
+/* ==========================================================================
+   LISTA DE TRABAJADORES (SUPERVISOR)
+   ========================================================================== */
+.scrollable-workers-container {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+  margin-bottom: 15px;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+  }
+}
+
 .employee-progress-card {
   background: #ffffff;
-  border-radius: 16px;
-  padding: 14px;
-  margin-bottom: 14px;
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 
   .emp-header {
@@ -232,6 +123,18 @@
       width: 44px;
       height: 44px;
       border: 1.5px solid #e2e8f0;
+    }
+
+    .avatar-fallback {
+      width: 100%;
+      height: 100%;
+      background: #e2e8f0;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
     }
 
     .emp-info {
@@ -265,40 +168,412 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 14px;
+    margin-top: 12px;
 
     .progress-track {
       flex: 1;
-      background: #e2e8f0;
-      height: 8px;
-      border-radius: 99px;
+      height: 6px;
+      background: #f1f5f9;
+      border-radius: 10px;
       overflow: hidden;
     }
 
     .progress-fill {
-      background: #3880ff;
       height: 100%;
-      border-radius: 99px;
-      
+      background: #10b981;
+      border-radius: 10px;
+      transition: width 0.4s ease;
+
       &.critical { background: #f97316; }
     }
 
     .progress-percent {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       font-weight: 700;
-      color: #3880ff;
-      min-width: 30px;
+      color: #10b981;
+      min-width: 32px;
       text-align: right;
-      
+
       &.critical { color: #f97316; }
     }
   }
 }
 
-.btn-assign-course {
-  margin: 15px 0 0 0;
-  height: 48px;
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  --box-shadow: 0 4px 14px rgba(56, 128, 255, 0.25);
+/* ==========================================================================
+   TARJETAS DE CURSOS (TRABAJADOR / OPERARIO)
+   ========================================================================== */
+.course-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 0 0 15px 0;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+
+  .course-thumb-container {
+    position: relative;
+    height: 140px;
+    background: #e2e8f0;
+
+    .course-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .course-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      --padding-start: 8px;
+      --padding-end: 8px;
+      --padding-top: 4px;
+      --padding-bottom: 4px;
+      border-radius: 6px;
+    }
+
+    .video-overlay {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      ion-icon {
+        font-size: 3rem;
+        color: rgba(255, 255, 255, 0.9);
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      }
+    }
+  }
+
+  .course-content-box {
+    padding: 14px;
+    text-align: left;
+
+    .course-title {
+      margin: 0 0 12px 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.35;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      ion-progress-bar {
+        height: 6px;
+        border-radius: 4px;
+      }
+
+      .pct-text {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #3880ff;
+      }
+    }
+  }
+}
+
+.new-course-item {
+  --background: #ffffff;
+  --border-radius: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  border: 1px solid #f1f5f9;
+  --padding-start: 10px;
+
+  .new-thumb {
+    width: 50px;
+    height: 50px;
+    --border-radius: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .new-label-box {
+    h2 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    p {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 2px;
+    }
+  }
+
+  .btn-add-course {
+    font-size: 1.5rem;
+    --color: #10b981;
+  }
+}
+
+/* ==========================================================================
+   ENTORNO CISCO NETACAD WORKSPACE (PANTALLA DIVIDIDA Y FIJACIONES MÓVILES)
+   ========================================================================== */
+.netacad-workspace {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  border: 1px solid #cbd5e1;
+  margin-top: 5px;
+  height: calc(100vh - 70px); 
+
+  // Corrección para móviles: permitimos que el contenedor crezca con el contenido y tenga scroll propio si es necesario
+  @media (max-width: 768px) {
+    height: auto !important;
+    min-height: calc(100vh - 60px);
+    border-radius: 0; // Se adapta mejor a la pantalla completa del celular
+  }
+
+  .netacad-header {
+    background: #ffffff; 
+    color: #0f172a;      
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0; 
+
+    .netacad-title-area {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      ion-button {
+        --padding-start: 4px;
+        --padding-end: 4px;
+        margin: 0;
+        --color: #2563eb; 
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0f172a; 
+      }
+      p {
+        margin: 2px 0 0 0;
+        font-size: 0.75rem;
+        color: #64748b; 
+      }
+    }
+
+    .netacad-progress-badge {
+      background: #eff6ff; 
+      border: 1px solid #bfdbfe;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      color: #1e40af; 
+      
+      strong {
+        color: #1d4ed8;
+        margin-left: 2px;
+      }
+    }
+  }
+
+  .netacad-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden; 
+    background: #f8fafc;
+
+    // Corrección para móviles: En celulares los paneles van uno debajo del otro, no en paralelo
+    @media (max-width: 768px) {
+      flex-direction: column;
+      overflow: visible !important; // Desbloquea el scroll general de la página
+    }
+
+    /* PANEL IZQUIERDO: Índice lateral */
+    .netacad-sidebar {
+      width: 260px;
+      background: #ffffff;
+      border-right: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+
+      @media (max-width: 768px) {
+        width: 100% !important; // Ocupa todo el ancho en celulares
+        max-height: 200px;     // Altura controlada para el temario antes de las preguntas
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .sidebar-title {
+        padding: 14px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #64748b;
+        background: #f1f5f9;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .temario-list {
+        padding: 0;
+        background: transparent;
+
+        .temario-divider {
+          --background: #f8fafc;
+          --color: #475569;
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding-top: 6px;
+          padding-bottom: 6px;
+        }
+
+        ion-item {
+          --padding-start: 14px;
+          --min-height: 48px;
+          font-size: 0.85rem;
+          --color: #334155;
+          font-weight: 500;
+          
+          ion-icon {
+            font-size: 1.1rem;
+            margin-right: 8px;
+          }
+
+          &.item-active {
+            --background: #eff6ff;
+            --color: #2563eb;
+            font-weight: 700;
+            border-left: 4px solid #2563eb;
+          }
+        }
+      }
+    }
+
+    /* PANEL DERECHO: Visor e Interactividad */
+    .netacad-content-viewer {
+      flex: 1;
+      background: #e2e8f0;
+      overflow: hidden;
+      position: relative;
+
+      @media (max-width: 768px) {
+        overflow: visible !important; // Elimina restricciones en móvil
+        height: auto;
+      }
+
+      .full-size-container {
+        width: 100%;
+        height: 100%;
+        background: #475569;
+        
+        @media (max-width: 768px) {
+          height: 300px; // Altura fija para el visor de material en móvil
+        }
+      }
+
+      .netacad-iframe {
+        border: none;
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+      }
+
+      /* Contenedor del Cuestionario interactivo */
+      .quiz-container {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        background: #ffffff;
+        padding: 24px;
+
+        @media (max-width: 768px) {
+          overflow-y: visible !important; // Permite el scroll fluido de la pantalla completa
+          height: auto;
+          padding: 16px;
+        }
+
+        .quiz-card-header {
+          border-bottom: 2px dashed #e2e8f0;
+          padding-bottom: 14px;
+          margin-bottom: 20px;
+          text-align: left;
+
+          h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0f172a; 
+          }
+          p {
+            margin: 4px 0 0 0;
+            font-size: 0.8rem;
+            color: #64748b;
+          }
+        }
+
+        .quiz-question-box {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
+          padding: 16px;
+          margin-bottom: 16px;
+          text-align: left;
+
+          .question-text {
+            margin: 0 0 12px 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a; 
+            line-height: 1.4;
+          }
+
+          .quiz-option-item {
+            --background: #ffffff;
+            --color: #1e293b;        
+            color: #1e293b;          
+            --border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #cbd5e1;
+            font-size: 0.85rem;
+            --padding-start: 10px;
+            
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: left;
+            
+            ion-radio {
+              width: 100%;
+              --padding-top: 12px;
+              --padding-bottom: 12px;
+              --color: #475569;         
+              --color-checked: #2563eb; 
+              color: #1e293b;           
+              font-weight: 500;
+              
+              justify-content: flex-start;
+              text-align: left;
+            }
+
+            &.item-radio-checked {
+              border-color: #2563eb;
+              background: #f0f6ff;
+            }
+          }
+        }
+      }
+    }
+  }
 }

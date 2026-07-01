@@ -29,5 +29,15 @@ export const routes: Routes = [
   {
     path: 'tab5',
     loadComponent: () => import('./tab5/tab5.page').then( m => m.Tab5Page)
+  },
+
+  // 👇 NUEVA RUTA
+  {
+    path: 'curso-viewer',
+    loadComponent: () =>
+      import('./curso-viewer/curso-viewer.page').then(
+        m => m.CursoViewerPage
+      )
   }
+
 ];

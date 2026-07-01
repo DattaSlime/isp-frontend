@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, NavController, ToastController } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http'; // <-- AGREGADO: Para conectar con SQL Server
+import { HttpClient, HttpClientModule } from '@angular/common/http'; // 👈 Asegúrate de importar HttpClientModule
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterLink]
+  imports: [IonicModule, CommonModule, FormsModule, RouterLink, HttpClientModule] // 👈 AGREGA HttpClientModule AQUÍ
 })
 export class LoginPage implements OnInit {
 

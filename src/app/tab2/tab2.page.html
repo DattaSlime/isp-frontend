@@ -2,7 +2,6 @@
   <div class="mobile-container">
     
     <div *ngIf="rolUsuario === 'Supervisor'">
-      
       <div class="header-section">
         <h1 class="page-title">Control de <span class="accent">Cursos</span></h1>
         <p class="page-subtitle">Monitoreo de avance y capacitación obligatoria</p>
@@ -74,7 +73,6 @@
               <ion-icon slot="icon-only" name="trash-outline" color="danger" style="font-size: 18px;"></ion-icon>
             </ion-button>
           </div>
-
         </div>
       </ion-list>
 
@@ -84,52 +82,132 @@
         <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
         ASIGNAR NUEVA CAPACITACIÓN
       </ion-button>
-
     </div>
 
     <div *ngIf="rolUsuario === 'Trabajador'">
-      <div class="header-section">
-        <h1 class="page-title">Mis <span class="accent">Cursos</span></h1>
-        <p class="page-subtitle">Fortalece tus conocimientos en seguridad</p>
+      
+      <div *ngIf="!cursoSeleccionado">
+        <div class="header-section">
+          <h1 class="page-title">Mis <span class="accent">Cursos</span></h1>
+          <p class="page-subtitle">Fortalece tus conocimientos en seguridad</p>
+        </div>
+
+        <ion-searchbar placeholder="Buscar capacitación..." class="custom-search" [(ngModel)]="busquedaOperario"></ion-searchbar>
+
+        <div class="section-label">En curso</div>
+        <div *ngFor="let curso of coursesTrabajadorFiltrados">
+          <ion-card class="course-card" (click)="seleccionarCursoNetacad(curso)">
+            <div class="course-thumb-container">
+              <img [src]="curso.imagen" class="course-img" alt="Curso" />
+              <ion-badge [color]="curso.tipo === 'VIDEO' ? 'secondary' : 'primary'" class="course-tag">
+                {{ curso.tag }}
+              </ion-badge>
+              <div class="video-overlay" [style.opacity]="1">
+                <ion-icon [name]="curso.tipo === 'VIDEO' ? 'play-circle' : 'document-text-outline'"></ion-icon>
+              </div>
+            </div>
+            <ion-card-content class="course-content-box">
+              <h3 class="course-title">{{ curso.titulo }}</h3>
+              <div class="progress-row">
+                <ion-progress-bar color="primary" [value]="curso.progresoCalculado / 100"></ion-progress-bar>
+                <span class="pct-text">{{ curso.progresoCalculado }}%</span>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <div class="section-label ion-margin-top">Nuevos para ti</div>
+        <ion-item lines="none" class="new-course-item">
+          <ion-thumbnail slot="start" class="new-thumb">
+            <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=150&q=80" alt="Auxilios" />
+          </ion-thumbnail>
+          <ion-label class="new-label-box">
+            <h2>Primeros Auxilios Avanzados</h2>
+            <p>Duración: 2h 30min</p>
+          </ion-label>
+          <ion-button fill="clear" slot="end" class="btn-add-course" (click)="inscribirCurso('Primeros Auxilios Avanzados')">
+            <ion-icon name="add-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
       </div>
 
-      <ion-searchbar placeholder="Buscar capacitación..." class="custom-search" [(ngModel)]="busquedaOperario"></ion-searchbar>
-
-      <div class="section-label">En curso</div>
-      <div *ngFor="let curso of coursesTrabajadorFiltrados">
-        <ion-card class="course-card" (click)="verContenidoCurso(curso)">
-          <div class="course-thumb-container">
-            <img [src]="curso.imagen" class="course-img" alt="Curso" />
-            <ion-badge [color]="curso.tipo === 'VIDEO' ? 'secondary' : 'primary'" class="course-tag">
-              {{ curso.tag }}
-            </ion-badge>
-            <div class="video-overlay" [style.opacity]="1">
-              <ion-icon [name]="curso.tipo === 'VIDEO' ? 'play-circle' : 'document-text-outline'"></ion-icon>
+      <div *ngIf="cursoSeleccionado" class="netacad-workspace">
+        
+        <div class="netacad-header">
+          <div class="netacad-title-area">
+            <ion-button fill="clear" color="light" (click)="cerrarWorkspaceNetacad()">
+              <ion-icon name="arrow-back-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+            <div>
+              <h3>{{ cursoSeleccionado.titulo }}</h3>
+              <p>Módulo de Autoaprendizaje Obligatorio</p>
             </div>
           </div>
-          <ion-card-content class="course-content-box">
-            <h3 class="course-title">{{ curso.titulo }}</h3>
-            <div class="progress-row">
-              <ion-progress-bar color="primary" [value]="curso.progresoCalculado / 100"></ion-progress-bar>
-              <span class="pct-text">{{ curso.progresoCalculado }}%</span>
-            </div>
-          </ion-card-content>
-        </ion-card>
-      </div>
+          <div class="netacad-progress-badge">
+            Progreso: <strong>{{ progresoCursoActivo }}%</strong>
+          </div>
+        </div>
 
-      <div class="section-label ion-margin-top">Nuevos para ti</div>
-      <ion-item lines="none" class="new-course-item">
-        <ion-thumbnail slot="start" class="new-thumb">
-          <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=150&q=80" alt="Auxilios" />
-        </ion-thumbnail>
-        <ion-label class="new-label-box">
-          <h2>Primeros Auxilios Avanzados</h2>
-          <p>Duración: 2h 30min</p>
-        </ion-label>
-        <ion-button fill="clear" slot="end" class="btn-add-course" (click)="inscribirCurso('Primeros Auxilios Avanzados')">
-          <ion-icon name="add-circle-outline"></ion-icon>
-        </ion-button>
-      </ion-item>
+        <div class="netacad-body">
+          <div class="netacad-sidebar">
+            <div class="sidebar-title">Índice del Curso</div>
+            <ion-list lines="full" class="temario-list">
+              
+              <ion-item-group>
+                <ion-item-divider sticky class="temario-divider">
+                  <ion-label>1. Material de Estudio</ion-label>
+                </ion-item-divider>
+                <ion-item button [class.item-active]="vistaActual === 'pdf'" (click)="cambiarVistaNetacad('pdf')">
+                  <ion-icon name="book-outline" slot="start" color="primary"></ion-icon>
+                  <ion-label class="ion-text-wrap">Manual de Capacitación</ion-label>
+                </ion-item>
+              </ion-item-group>
+
+              <ion-item-group>
+                <ion-item-divider sticky class="temario-divider">
+                  <ion-label>2. Comprobación</ion-label>
+                </ion-item-divider>
+                <ion-item button [class.item-active]="vistaActual === 'quiz'" (click)="cambiarVistaNetacad('quiz')">
+                  <ion-icon name="document-text-outline" slot="start" color="warning"></ion-icon>
+                  <ion-label class="ion-text-wrap">Evaluación de Conocimiento</ion-label>
+                  <ion-badge *ngIf="progresoCursoActivo === 100" color="success" slot="end">Ok</ion-badge>
+                </ion-item>
+              </ion-item-group>
+
+            </ion-list>
+          </div>
+
+          <div class="netacad-content-viewer">
+            
+            <div *ngIf="vistaActual === 'pdf'" class="full-size-container">
+              <iframe [src]="urlPdfSegura" class="netacad-iframe" width="100%" height="100%"></iframe>
+            </div>
+
+            <div *ngIf="vistaActual === 'quiz'" class="quiz-container ion-padding">
+              <div class="quiz-card-header">
+                <h3>Cuestionario de Validación</h3>
+                <p>Responde las siguientes preguntas basadas en la lectura previa para validar tu progreso al 100%.</p>
+              </div>
+
+              <div *ngFor="let q of cuestionarioActivo; let idx = index" class="quiz-question-box">
+                <p class="question-text"><strong>P{{idx+1}}.</strong> {{ q.pregunta }}</p>
+                <ion-radio-group [(ngModel)]="respuestasTrabajador[idx]">
+                  <ion-item lines="none" *ngFor="let opcion of q.opciones" class="quiz-option-item">
+                    <ion-radio [value]="opcion" labelPlacement="end">{{ opcion }}</ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+              </div>
+
+              <ion-button expand="block" color="success" shape="round" class="ion-margin-top" (click)="evaluarCuestionarioTrabajador()">
+                <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                ENVIAR RESPUESTAS Y COMPLETAR
+              </ion-button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
 
     </div>
 

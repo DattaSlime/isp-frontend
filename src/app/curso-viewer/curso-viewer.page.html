@@ -1,0 +1,113 @@
+<ion-header class="ion-no-border">
+
+  <ion-toolbar color="primary">
+
+    <ion-buttons slot="start">
+      <ion-button (click)="volver()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>
+      {{titulo}}
+    </ion-title>
+
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content fullscreen class="viewer-page">
+
+<div class="viewer-container">
+
+    <div class="course-info">
+
+        <h2>Material del Curso</h2>
+
+        <p>
+            Lee completamente el documento antes de comenzar la evaluación.
+        </p>
+
+    </div>
+
+
+    <!-- PDF -->
+
+    <div class="pdf-container">
+
+        <canvas id="pdfCanvas"></canvas>
+
+    </div>
+
+
+    <!-- Controles -->
+
+    <div class="controls">
+
+        <ion-button
+        fill="outline"
+        size="small"
+        (click)="paginaAnterior()">
+
+            ◀ Anterior
+
+        </ion-button>
+
+
+        <span>
+
+            Página {{paginaActual}} de {{totalPaginas}}
+
+        </span>
+
+
+        <ion-button
+        fill="outline"
+        size="small"
+        (click)="paginaSiguiente()">
+
+            Siguiente ▶
+
+        </ion-button>
+
+    </div>
+
+
+    <!-- progreso -->
+
+    <div class="progress-section">
+
+        <ion-progress-bar
+        [value]="progreso/100">
+        </ion-progress-bar>
+
+        <p>
+
+            {{progreso}} % completado
+
+        </p>
+
+    </div>
+
+
+    <!-- botón examen -->
+
+    <ion-button
+
+    expand="block"
+
+    color="success"
+
+    class="exam-button"
+
+    (click)="iniciarEvaluacion()">
+
+        Comenzar Evaluación
+
+    </ion-button>
+
+
+</div>
+
+</ion-content>
